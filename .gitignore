@@ -3,6 +3,7 @@
 Debug
 obj
 *.db
+*opendb
 
 # Compiled Object files
 *.slo

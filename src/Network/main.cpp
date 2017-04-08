@@ -37,9 +37,9 @@ void NeuralNetworkTest::start()
 
 	// Now if we have a display we show the results
 	if (display != nullptr)	{
-		display->show("GameAI Graphs : Blue RBF, Green MLP, Red Function - Noise");
+		display->show("GameAI Graphs : Blue = RBF, Green = MLP, Red = Function, Gray = Noise");
 	} else {
-		MessageBox(NULL, "Sorry but the display wasnt created", "Error", MB_OK);
+		MessageBox(NULL, "Error With Display!", "Error", MB_OK);
 	}
 }
 

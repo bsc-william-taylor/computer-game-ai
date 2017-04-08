@@ -19,11 +19,11 @@ namespace Trainer
         {
             MLP_ErrorThreshold.Text = "0.01";
             MLP_LearningRate.Text = "0.1";
-            MLP_Epochs.Text = "50000";
+            MLP_Epochs.Text = "500";
 
             RBF_ErrorThreshold.Text = "0.01";
             RBF_LearningRate.Text = "0.1";
-            RBF_Epochs.Text = "50000";
+            RBF_Epochs.Text = "500";
         }
 
         private void SetupComboBox()
@@ -110,7 +110,7 @@ namespace Trainer
 
                         // The save the updated file & start the simulator
                         settings.Save(@"settings.xml");
-                        Process.Start("simulator.exe");
+                        Process.Start("Network.exe");
                     }
                     catch (Exception e)
                     {

@@ -9,5 +9,3 @@
 #include <math.h>
 #include <assert.h>
 #include "Timer.h"
-
-#pragma comment(lib, "../../lib/freeglut/lib/freeglut.lib")

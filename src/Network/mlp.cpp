@@ -1,168 +1,159 @@
 
 #include "mlp.h"
 
-MultiLayeredPercepton::MultiLayeredPercepton()
-	: errorThreshold(0.1), learningRate(0.1)
+MLP::MLP() : 
+    errorThreshold(0.1), 
+    learningRate(0.1)
 {
 }
 
-MultiLayeredPercepton::~MultiLayeredPercepton()
+MLP::~MLP()
 {
-	for (auto& i : inputNeurons) {
-		delete i;
-	}
-
-	for (auto& i : hiddenNeurons) {
-		delete i;
-	}
-
-	for (auto& i : outputNeurons) {
-		delete i;
-	}
 }
 
-MultiLayeredPercepton * MultiLayeredPercepton::setErrorThreshold(double err)
+MLP * MLP::setErrorThreshold(double err)
 {
-	errorThreshold = err;
-	return this;
+    errorThreshold = err;
+    return this;
 }
 
-MultiLayeredPercepton * MultiLayeredPercepton::setLearningRate(double rate)
+MLP * MLP::setLearningRate(double rate)
 {
-	learningRate = rate;
-	return this;
+    learningRate = rate;
+    return this;
 }
 
-MultiLayeredPercepton * MultiLayeredPercepton::setOutputLayer(std::vector<OutputNode *> vec)
+MLP * MLP::setOutputLayer(OutputLayer vec)
 {
-	outputNeurons = std::vector<OutputNode *>(vec);
-	return this;
+    outputNeurons = std::move(vec);
+    return this;
 }
 
-MultiLayeredPercepton * MultiLayeredPercepton::setHiddenLayer(std::vector<HiddenNode *> vec)
+MLP * MLP::setHiddenLayer(HiddenLayerMLP vec)
 {
-	hiddenNeurons = std::vector<HiddenNode *>(vec);
-	HiddenNode * bias = new HiddenNode();
-	bias->setActivationFunction(hiddenNeurons[0]->getFunction());
-	bias->makeBias();
-	
-	for (unsigned i = 0; i < outputNeurons.size(); i++){
-		bias->feedForwardTo(outputNeurons[i]);
-	}
+    hiddenNeurons = std::move(vec);
 
-	hiddenNeurons.push_back(bias);
-	return this;
+    auto bias = std::make_unique<HiddenNode>();
+    bias->setActivationFunction(hiddenNeurons[0]->getFunction());
+    bias->makeBias();
+
+    for (auto i = 0; i < outputNeurons.size(); i++)
+    {
+        bias->feedForwardTo(outputNeurons[i].get());
+    }
+
+    hiddenNeurons.push_back(std::move(bias));
+    return this;
 }
 
-MultiLayeredPercepton * MultiLayeredPercepton::setInputLayer(std::vector<InputNode *> vec)
+MLP * MLP::setInputLayer(InputLayer vec)
 {
-	inputNeurons = std::vector<InputNode *>(vec);
-	InputNode * bias = new InputNode();
-	bias->setValue(1.0);
-	for (unsigned i = 0; i < hiddenNeurons.size(); i++){
-		if (hiddenNeurons[i]->getValue() == 0.0) {
-			bias->feedForwardTo(hiddenNeurons[i]);
-		}
-	}
+    inputNeurons = std::move(vec);
 
-	inputNeurons.push_back(bias);
-	return this;
+    auto bias = std::make_unique<InputNode>();
+    bias->setValue(1.0);
+    for (unsigned i = 0; i < hiddenNeurons.size(); i++) {
+        if (hiddenNeurons[i]->getValue() == 0.0) {
+            bias->feedForwardTo(hiddenNeurons[i].get());
+        }
+    }
+
+    inputNeurons.push_back(std::move(bias));
+    return this;
 }
 
-MultiLayeredPercepton * MultiLayeredPercepton::train(int iterations)
+MLP * MLP::train(int iterations)
 {
-	std::vector<bool> testsCompleted;
-	testsCompleted.resize(trainingSet.size());
-	for (auto& v : testsCompleted) {
-		v = false;
-	}
+    std::vector<bool> testsCompleted;
+    testsCompleted.resize(trainingSet.size());
+    for (auto& v : testsCompleted) {
+        v = false;
+    }
 
-	int testID = chooseInputPattern(NULL, testsCompleted);
+    int testID = chooseInputPattern(NULL, testsCompleted);
 
-	int actualTimes = 0;
-	while (actualTimes <= iterations) {
-		Point& test = trainingSet[testID];
-		inputNeurons[0]->setValue(test.x);
+    int actualTimes = 0;
+    while (actualTimes <= iterations) {
+        Point& test = trainingSet[testID];
+        inputNeurons[0]->setValue(test.x);
 
-		for (auto& hiddenNode : hiddenNeurons) {
-			hiddenNode->feedForward(inputNeurons);
-		}
+        for (auto& hiddenNode : hiddenNeurons) 
+        {
+            hiddenNode->feedForward(copy_vector(inputNeurons));
+        }
 
-		outputNeurons[0]->finish(hiddenNeurons);
-		
-		double error = test.y - outputNeurons[0]->getValue();
+        outputNeurons[0]->finish(copy_vector(hiddenNeurons));
 
-//		DEBUG(error);
+        double error = test.y - outputNeurons[0]->getValue();
 
-		if (abs(error) <= errorThreshold) {
-			++actualTimes;
-			testsCompleted[testID] = true;
-			int totalTests = 0;
-			for (auto& v : testsCompleted) {
-				if (v) totalTests++;
-			}
+        if (abs(error) <= errorThreshold) {
+            ++actualTimes;
+            testsCompleted[testID] = true;
+            int totalTests = 0;
+            for (auto& v : testsCompleted) {
+                if (v) totalTests++;
+            }
 
-			if (totalTests == testsCompleted.size()){
-				break;
-			} else {
-				testID = chooseInputPattern(testID, testsCompleted); 
-			}
-		} else {
-			for (auto& v : testsCompleted) { v = false; }
-			
-			// Adjust weights in the hidden neuron
-			for (auto & neuron : hiddenNeurons) {
-				if (!neuron->isBias()) {
-					neuron->calculateError(outputNeurons[0], error);
-				}
+            if (totalTests == testsCompleted.size()) {
+                break;
+            }
+            else {
+                testID = chooseInputPattern(testID, testsCompleted);
+            }
+        }
+        else {
+            for (auto& v : testsCompleted) { v = false; }
 
-				neuron->adjustWeight(outputNeurons[0], learningRate, error);
-			}
+            // Adjust weights in the hidden neuron
+            for (auto & neuron : hiddenNeurons) {
+                if (!neuron->isBias()) {
+                    neuron->calculateError(outputNeurons[0].get(), error);
+                }
 
-			for (auto & neuron : inputNeurons) {
-				for (int i = 0; i < hiddenNeurons.size(); i++) {
-					if (!hiddenNeurons[i]->isBias()) {
-						neuron->adjustWeight(hiddenNeurons[i], learningRate, hiddenNeurons[i]->getError());
-					}
-				}
-			}
+                neuron->adjustWeight(outputNeurons[0].get(), learningRate, error);
+            }
 
-			//std::cout << "End" << std::endl;
+            for (auto & neuron : inputNeurons) {
+                for (int i = 0; i < hiddenNeurons.size(); i++) {
+                    if (!hiddenNeurons[i]->isBias()) {
+                        neuron->adjustWeight(hiddenNeurons[i].get(), learningRate, hiddenNeurons[i]->getError());
+                    }
+                }
+            }
 
-			testID = chooseInputPattern(testID, testsCompleted);
-		}
-	}
+            testID = chooseInputPattern(testID, testsCompleted);
+        }
+    }
 
-	//std::cout << actualTimes << std::endl;
-	return this;
+    return this;
 }
 
-int MultiLayeredPercepton::chooseInputPattern(int TEST_ID, std::vector<bool>& vec)
+int MLP::chooseInputPattern(int TEST_ID, std::vector<bool>& vec)
 {
-	int ID = TEST_ID;
-	int testID = 0;
-	do  {
-		testID = rand() % trainingSet.size();
-	} while (ID == testID && vec[testID]);
+    int ID = TEST_ID;
+    int testID = 0;
+    do {
+        testID = rand() % trainingSet.size();
+    } while (ID == testID && vec[testID]);
 
-	return testID;
+    return testID;
 }
 
-MultiLayeredPercepton * MultiLayeredPercepton::setTrainingSet(std::vector<Point> point)
+MLP * MLP::setTrainingSet(TrainingData point)
 {
-	this->trainingSet = point;
-
-	return this;
+    trainingSet = point;
+    return this;
 }
 
-double MultiLayeredPercepton::fx(double x)
+double MLP::fx(double x)
 {
-	inputNeurons[0]->setValue(x);
+    inputNeurons.front()->setValue(x);
 
-	for (auto& hiddenNode : hiddenNeurons) {
-		hiddenNode->feedForward(inputNeurons);
-	}
-
-	outputNeurons[0]->finish(hiddenNeurons);
-	return outputNeurons[0]->getValue();
+    for (auto& hiddenNode : hiddenNeurons) 
+    {
+        hiddenNode->feedForward(copy_vector(inputNeurons));
+    }
+    
+    outputNeurons.front()->finish(copy_vector(hiddenNeurons));
+    return outputNeurons.front()->getValue();
 }

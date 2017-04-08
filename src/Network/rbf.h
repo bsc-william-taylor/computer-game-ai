@@ -5,28 +5,26 @@
 #include "mlp.h"
 #include "Nodes.h"
 
-class RadicalBasisFunction : public ArtificalNeuralNetwork  
+class RBF : public NeuralNetwork  
 {
-private:
-	std::function<double(double, double)> spaceFunc;
-	std::vector<FunctionNode *> hiddenLayer;
-	std::vector<Point> trainingSet;
-	
-	ReceptorNode * inputLayer;
-	ResultNode * outputLayer;
-public:
-	RadicalBasisFunction();
-	~RadicalBasisFunction();
+    HiddenLayerRBF hiddenLayer;
+	TrainingData trainingSet;
+	ReceptorNode inputLayer;
+	ResultNode outputLayer;
+    SpaceFunc spaceFunc;
 
-	RadicalBasisFunction * setSpaceFunction(std::function<double(double, double)>);
-	RadicalBasisFunction * setTrainingData(TrainingSet set);
-	RadicalBasisFunction * setErrorThreshold(double);
-	RadicalBasisFunction * setLearningRate(double);
-	RadicalBasisFunction * setupHiddenLayer();
-	RadicalBasisFunction * train(int);
+    double errorThreshold;
+    double learningRate;
+public:
+	RBF();
+	virtual ~RBF();
+
+	RBF* setSpaceFunction(SpaceFunc function);
+	RBF* setTrainingData(TrainingData set);
+	RBF* setErrorThreshold(double);
+	RBF* setLearningRate(double);
+	RBF* setupHiddenLayer();
+	RBF* train(int);
 
 	double fx(double);
-private:
-	double errorThreshold;
-	double learningRate;
 };

@@ -3,10 +3,10 @@
 
 #include "Common.h"
 
-class ArtificalNeuralNetwork 
+class NeuralNetwork
 {
 public:
-    virtual ~ArtificalNeuralNetwork() = default;
-	virtual ArtificalNeuralNetwork * train(int) = 0;
-	virtual double fx(double) = 0;
+    virtual ~NeuralNetwork() = default;
+    virtual NeuralNetwork * train(int) = 0;
+    virtual double fx(double) = 0;
 };

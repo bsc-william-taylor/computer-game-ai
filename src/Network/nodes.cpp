@@ -95,11 +95,7 @@ InputNode::~InputNode()
 
 void InputNode::feedForwardTo(HiddenNode * node)
 {
-    float f = 0;
-    //do {
-    f = static_cast <float>(rand()) / (static_cast <float> (RAND_MAX / 1.0));
-    //} while (f < 0.0001);
-
+    float f = static_cast <float>(rand()) / (static_cast <float> (RAND_MAX / 1.0));
     hiddenLayerNodes.push_back(node);
     hiddenWeights.push_back(f);
 }
@@ -153,11 +149,7 @@ void HiddenNode::setActivationFunction(std::function<double(std::vector<InputNod
 
 void HiddenNode::feedForwardTo(OutputNode * node)
 {
-    float f = 0;
-    //do {
-    f = static_cast <float>(rand()) / (static_cast <float> (RAND_MAX / 1.0));
-    //} while (f < 0.0001);
-
+    auto f = static_cast <float>(rand()) / (static_cast <float> (RAND_MAX / 1.0));
     outputNodes.push_back(node);
     weights.push_back(f);
 }
@@ -174,7 +166,6 @@ void HiddenNode::feedForward(std::vector<InputNode *>& inputs)
 
 void HiddenNode::calculateError(OutputNode * node, double outputError)
 {
-    //error = outputError *  getWeight(node) * (1 - pow(value, 2.0));
     error = outputError * getWeight(node) * value * (1 - value);
 }
 

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings>
-  <TrainingSet>10</TrainingSet>
+  <TrainingData>10</TrainingData>
   <Noise>0.05</Noise>
   <SettingsMLP>
     <ErrorThreshold>0.01</ErrorThreshold>

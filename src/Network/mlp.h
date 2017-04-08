@@ -5,29 +5,28 @@
 #include "Nodes.h"
 #include "Graph.h"
 
-class MultiLayeredPercepton : public ArtificalNeuralNetwork 
+class MLP : public NeuralNetwork 
 {
-private:
+    TrainingData trainingSet;
+    HiddenLayerMLP hiddenNeurons;
+    OutputLayer outputNeurons;
+    InputLayer inputNeurons;
+
 	double errorThreshold;
 	double learningRate;
 public:
-	MultiLayeredPercepton();
-	~MultiLayeredPercepton();
+	MLP();
+	virtual ~MLP();
 
-	MultiLayeredPercepton * setOutputLayer(std::vector<OutputNode *>);
-	MultiLayeredPercepton * setHiddenLayer(std::vector<HiddenNode *>);
-	MultiLayeredPercepton * setInputLayer(std::vector<InputNode *>);
-	MultiLayeredPercepton * setTrainingSet(std::vector<Point>);
-	MultiLayeredPercepton * setErrorThreshold(double);
-	MultiLayeredPercepton * setLearningRate(double);
-	MultiLayeredPercepton * train(int);
-private:
-	std::vector<HiddenNode *> hiddenNeurons;
-	std::vector<OutputNode *> outputNeurons;
-	std::vector<InputNode *> inputNeurons;
-	std::vector<Point> trainingSet;
-public:
+    int chooseInputPattern(int, std::vector<bool>& vec);
+
+	MLP* setOutputLayer(OutputLayer outputLayer);
+	MLP* setHiddenLayer(HiddenLayerMLP hiddenLayer);
+	MLP* setInputLayer(InputLayer inputLayer);
+	MLP* setTrainingSet(TrainingData trainingSet);
+	MLP* setErrorThreshold(double);
+	MLP* setLearningRate(double);
+	MLP* train(int);
+
 	double fx(double);
-private:
-	int chooseInputPattern(int, std::vector<bool>& vec);
 };

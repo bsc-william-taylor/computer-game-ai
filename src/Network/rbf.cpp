@@ -1,96 +1,93 @@
 
 #include "rbf.h"
 
-RadicalBasisFunction::RadicalBasisFunction()
+RBF::RBF() :
+    errorThreshold(0.01),
+    learningRate(0.2)
 {
-	outputLayer = new ResultNode();
-	inputLayer = new ReceptorNode();
-
-	errorThreshold = 0.01;
-	learningRate = 0.2;
 }
 
-RadicalBasisFunction::~RadicalBasisFunction()
+RBF::~RBF()
 {
-	for (auto& neuron : hiddenLayer) {
-		delete neuron;
-	}
-
-	delete outputLayer;
-	delete inputLayer;
 }
 
-double RadicalBasisFunction::fx(double x)
-{ 
-	inputLayer->setValue(x);
-
-	for (auto& hiddenNeuron : hiddenLayer) {
-		inputLayer->feedForward(hiddenNeuron);
-		hiddenNeuron->feedForward(outputLayer);
-	}
-
-	return outputLayer->getValue(); 
-}
-
-RadicalBasisFunction * RadicalBasisFunction::setErrorThreshold(double error)
+RBF* RBF::setErrorThreshold(double error)
 {
-	errorThreshold = error;
-	return this;
+    errorThreshold = error;
+    return this;
 }
 
-RadicalBasisFunction * RadicalBasisFunction::setLearningRate(double rate)
+RBF* RBF::setLearningRate(double rate)
 {
-	learningRate = rate;
-	return this;
+    learningRate = rate;
+    return this;
 }
 
-RadicalBasisFunction * RadicalBasisFunction::setupHiddenLayer()
+RBF* RBF::setTrainingData(TrainingData set)
 {
-	for (unsigned i = 0; i < trainingSet.size(); i++) {
-		hiddenLayer.push_back(new FunctionNode(spaceFunc));
-		hiddenLayer[i]->setCenter(trainingSet[i].x);
-	}
-
-	return this;
+    trainingSet = set;
+    return this;
 }
 
-RadicalBasisFunction * RadicalBasisFunction::setTrainingData(TrainingSet set)
+RBF* RBF::setSpaceFunction(SpaceFunc func)
 {
-	trainingSet = std::vector<Point>(set);
-	return this;
+    spaceFunc = func;
+    return this;
 }
 
-RadicalBasisFunction * RadicalBasisFunction::setSpaceFunction(std::function<double(double, double)> func)
+RBF* RBF::setupHiddenLayer()
 {
-	spaceFunc = func;
-	return this;
+    for (auto i = 0; i < trainingSet.size(); i++)
+    {
+        auto node = std::make_unique<FunctionNode>(spaceFunc);
+        node->setCenter(trainingSet[i].x);
+        hiddenLayer.push_back(std::move(node));
+    }
+
+    return this;
 }
 
-RadicalBasisFunction * RadicalBasisFunction::train(int iterations)
-{ 
-	for (int i = 0; i < iterations;) {
-		unsigned trains = 0;
-		while (trains < trainingSet.size()) {
-			Point& point = trainingSet[trains];
-			inputLayer->setValue(point.x);
-			i++;
+double RBF::fx(double x)
+{
+    inputLayer.setValue(x);
 
-			for (auto& hiddenNeuron : hiddenLayer) {
-				inputLayer->feedForward(hiddenNeuron);
-				hiddenNeuron->feedForward(outputLayer);
-			}
+    for (auto& hiddenNeuron : hiddenLayer)
+    {
+        inputLayer.feedForward(hiddenNeuron.get());
+        hiddenNeuron->feedForward(&outputLayer);
+    }
 
-			double error = outputLayer->getError(point.y);
+    return outputLayer.getValue();
+}
 
-			if (abs(error) <= errorThreshold) {
-				trains++;
-			} else {
-				for (auto& hiddenNeuron : hiddenLayer) {
-					hiddenNeuron->adjustWeights(learningRate, error);
-				}
-			}
-		}
-	}
 
-	return this;
+RBF* RBF::train(int iterations)
+{
+    for (auto i = 0; i < iterations;)
+    {
+        auto trains = 0u;
+
+        while (trains < trainingSet.size())
+        {
+            auto& point = trainingSet[trains];
+            inputLayer.setValue(point.x);
+            i++;
+
+            for (auto& hiddenNeuron : hiddenLayer)
+            {
+                inputLayer.feedForward(hiddenNeuron.get());
+                hiddenNeuron->feedForward(&outputLayer);
+            }
+
+            double error = outputLayer.getError(point.y);
+            trains += abs(error) <= errorThreshold ? 1 : 0;
+
+            for (auto& hiddenNeuron : hiddenLayer)
+            {
+                hiddenNeuron->adjustWeights(learningRate, error);
+            }
+        }
+    }
+
+    return this;
 }

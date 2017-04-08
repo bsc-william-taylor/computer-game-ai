@@ -71,7 +71,7 @@ namespace Ui
                         settings.SelectSingleNode("/Settings/SettingsRBF/ErrorThreshold").InnerText = RBFErrorThreshold.Text;
                         settings.SelectSingleNode("/Settings/SettingsRBF/LearningRate").InnerText = RBFLearningRate.Text;
                         settings.SelectSingleNode("/Settings/SettingsRBF/Iterations").InnerText = RBFEpochs.Text;
-                        settings.SelectSingleNode("/Settings/TrainingSet").InnerText = TrainingComboBox.Text;
+                        settings.SelectSingleNode("/Settings/TrainingData").InnerText = TrainingComboBox.Text;
                         settings.SelectSingleNode("/Settings/Noise").InnerText = NoiseComboBox.Text;
                         settings.Save(@"settings.xml");
 

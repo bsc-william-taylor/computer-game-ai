@@ -1,44 +1,39 @@
 
 #include "Graph.h"
 
-// Constructor & Deconstructor
-Graph::Graph(ArtificalNeuralNetwork * neturalNetwork)
+Graph::Graph(NeuralNetwork * neturalNetwork)
 {
     neurelNetwork = neturalNetwork;
-    colour.set(1.0, 0.0, 0.0);
+    colour = Point(1.0, 0.0, 0.0);
     fx = [](double x) { return x; };
 }
 
 Graph::Graph(std::function<double(double)> func)
 {
-    colour.set(1.0, 0.0, 0.0);
+    colour = Point(1.0, 0.0, 0.0);
     neurelNetwork = NULL;
     fx = func;
 }
 
 Graph::~Graph()
 {
-    // if a nerual network was provided we delete it
     if (neurelNetwork != NULL) {
         delete neurelNetwork;
     }
 }
 
-// Sets the colour to draw the function f(x)
 Graph * Graph::setColour(double r, double g, double b)
 {
-    colour.set(r, g, b);
+    colour = Point(r, g, b);
     return this;
 }
 
-// Sets the function f(x) which will return the y value present in the graph
 Graph * Graph::setFunction(std::function<double(double)> func)
 {
     fx = func;
     return this;
 }
 
-// This function draws the graph in the display for OpenGL 2.0
 Graph * Graph::view()
 {
     // We start by specifing the drawing type
@@ -129,13 +124,13 @@ Graph * Graph::applyNoise(double noiseMag)
 }
 
 // Just a get function for the nerual network being used
-ArtificalNeuralNetwork * Graph::getNetwork()
+NeuralNetwork * Graph::getNetwork()
 {
     return neurelNetwork;
 }
 
 // Sets the neural network we will be using instead of a function object
-Graph * Graph::setFunction(ArtificalNeuralNetwork * network)
+Graph * Graph::setFunction(NeuralNetwork * network)
 {
     neurelNetwork = network;
     return this;

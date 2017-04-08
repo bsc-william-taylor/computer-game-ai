@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 
-class Timer 
+class Timer
 {
     static __int64 counterStart;
     static double frequency;

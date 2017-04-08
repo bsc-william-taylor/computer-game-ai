@@ -5,6 +5,16 @@
 
 class ResultNode;
 class HiddenNode;
+class InputNode;
+class FunctionNode;
+class OutputNode;
+
+using HiddenLayerMLP = std::vector<std::unique_ptr<HiddenNode>>;
+using OutputLayer = std::vector<std::unique_ptr<OutputNode>>;
+using InputLayer = std::vector<std::unique_ptr<InputNode>>;
+
+using HiddenLayerRBF = std::vector<std::unique_ptr<FunctionNode>>;
+using SpaceFunc = std::function<double(double, double)>;
 
 class FunctionNode
 {
@@ -15,7 +25,7 @@ public:
     ~FunctionNode();
 
     void adjustWeights(double learningRate, double error);
-    void feedForward(ResultNode * node);
+    void feedForward(ResultNode* node);
     void activate(double);
     void setCenter(double);
 
@@ -47,20 +57,20 @@ public:
     double getValue();
 };
 
-class ReceptorNode {
-private:
-    FunctionNode * channel;
+class ReceptorNode 
+{
+    FunctionNode* channel;
     double value;
 public:
     ReceptorNode();
     ~ReceptorNode();
 
-    void feedForward(FunctionNode * functions);
+    void feedForward(FunctionNode* functions);
     void setValue(double);
 };
 
-class ResultNode {
-private:
+class ResultNode 
+{
     double output;
 public:
     ResultNode();
@@ -74,7 +84,6 @@ public:
 
 class InputNode
 {
-private:
     std::vector<HiddenNode *> hiddenLayerNodes;
     std::vector<double> hiddenWeights;
 
@@ -94,7 +103,6 @@ public:
 
 class HiddenNode
 {
-private:
     std::function<double(std::vector<InputNode *>&, HiddenNode *)> activationFunction;
     std::vector<OutputNode *> outputNodes;
     std::vector<double> weights;

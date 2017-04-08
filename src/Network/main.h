@@ -35,7 +35,7 @@ struct TestParameters {
 		RBF_LEARNING_RATE = atof(root->FirstChildElement("LearningRate")->GetText());
 		RBF_ITERATIONS = atof(root->FirstChildElement("Iterations")->GetText());
 		
-		TRAINING_SET = atof(settingsDocument.FirstChildElement("Settings")->FirstChildElement("TrainingSet")->GetText());
+		TRAINING_SET = atof(settingsDocument.FirstChildElement("Settings")->FirstChildElement("TrainingData")->GetText());
 		NOISE =  atof(settingsDocument.FirstChildElement("Settings")->FirstChildElement("Noise")->GetText());
 	}
 };

@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Neurel Network">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Neurel Network\Visuals">
+      <UniqueIdentifier>{4393fd90-10e5-4c43-8aed-d9888ca040f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\Visuals\Display">
+      <UniqueIdentifier>{fa0f13ac-82cd-4210-809e-58a77f0f103c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\Visuals\Graph">
+      <UniqueIdentifier>{ab557f4c-4860-4dc8-865a-37409e0e0bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks">
+      <UniqueIdentifier>{c3dc4415-07a3-421b-8b78-4633d67a5b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\MultiLayeredPerceptron">
+      <UniqueIdentifier>{69378710-6ae2-4111-afe0-fdc3e0bb7572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\MultiLayeredPerceptron\Input">
+      <UniqueIdentifier>{52cceec0-febe-4949-a4ec-8633087ce36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\MultiLayeredPerceptron\Hidden">
+      <UniqueIdentifier>{99c0cea3-79e0-4931-94a9-e2a3b3084764}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\MultiLayeredPerceptron\Output">
+      <UniqueIdentifier>{4cfb82d8-c1ed-4bd9-8915-7a75288dbd07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\ArtificalNeurelNetwork">
+      <UniqueIdentifier>{ac7b81c8-237f-4996-aa34-5f5d3479614c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Tests">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\RadialBasisFunction">
+      <UniqueIdentifier>{0406229c-d798-4372-9fc5-6c88d55ca8e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\RadialBasisFunction\Receptor">
+      <UniqueIdentifier>{1436f3d2-e4b6-4778-8ae1-0f395f067879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\RadialBasisFunction\Function">
+      <UniqueIdentifier>{4dc66e6a-6208-4b08-9ba7-f00dc2b35347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\AI Networks\RadialBasisFunction\Output">
+      <UniqueIdentifier>{1fc011d4-4bd3-42fe-917e-d3a0930ac707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\Utilities">
+      <UniqueIdentifier>{d98f4c3f-ee5a-4996-a15b-45a621dab3fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\Utilities\Common">
+      <UniqueIdentifier>{1d90370d-8c03-44db-8d14-67c0e84da354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\Utilities\Timer">
+      <UniqueIdentifier>{3c4afc6a-1be6-4ac9-b56b-ae8ada9e4274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{1969a8bf-b1f4-4a88-b9d4-7eb9e953b5a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Neurel Network\Xml">
+      <UniqueIdentifier>{ad199c22-18f6-46b5-a7fe-cebcbaeaf229}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Neurel Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>Neurel Network\Visuals\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>Neurel Network\Visuals\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="InputNode.cpp">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="HiddenNode.cpp">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron\Hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputNode.cpp">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron\Output</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiLayeredPercepton.cpp">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionNode.cpp">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultNode.cpp">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction\Output</Filter>
+    </ClCompile>
+    <ClCompile Include="ReceptorNode.cpp">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction\Receptor</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialBasisFunction.cpp">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Neurel Network\Utilities\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>Neurel Network\Xml</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Display.h">
+      <Filter>Neurel Network\Visuals\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Neurel Network\Visuals\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="InputNode.h">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="HiddenNode.h">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron\Hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputNode.h">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron\Output</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiLayeredPercepton.h">
+      <Filter>Neurel Network\AI Networks\MultiLayeredPerceptron</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionNode.h">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultNode.h">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction\Output</Filter>
+    </ClInclude>
+    <ClInclude Include="ReceptorNode.h">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction\Receptor</Filter>
+    </ClInclude>
+    <ClInclude Include="RadialBasisFunction.h">
+      <Filter>Neurel Network\AI Networks\RadialBasisFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Neurel Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNetwork.h">
+      <Filter>Neurel Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ArtificalNeuralNetwork.h">
+      <Filter>Neurel Network\AI Networks\ArtificalNeurelNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Neurel Network\Utilities\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Neurel Network\Utilities\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2.h">
+      <Filter>Neurel Network\Xml</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameAI.rc">
+      <Filter>Data</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ai5.ico">
+      <Filter>Data</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="settings.xml">
+      <Filter>Data</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

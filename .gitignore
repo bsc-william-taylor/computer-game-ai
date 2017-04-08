@@ -4,6 +4,11 @@
 *.o
 *.obj
 
+# Folders
+.vs
+Debug
+Release
+
 # Precompiled Headers
 *.gch
 *.pch

@@ -1,3 +1,9 @@
+# Folder
+.vs
+Debug
+obj
+*.db
+
 # Compiled Object files
 *.slo
 *.lo

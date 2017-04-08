@@ -1,7 +1,7 @@
 ﻿
 using System.Windows;
 
-namespace Trainer
+namespace Ui
 {
     public partial class App : Application
     {

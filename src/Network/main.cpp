@@ -13,8 +13,6 @@ NeuralNetworkTest::NeuralNetworkTest()
 
 NeuralNetworkTest::~NeuralNetworkTest()
 {
-	// release the display cleaning up memory
-	Display::release();
 }
 
 // This function sets up the display for the tests
@@ -46,13 +44,17 @@ void NeuralNetworkTest::start()
 // This function sets up a graph to show the continous function we are approximating
 void NeuralNetworkTest::setupContinuousFunction() {
 	// We create the graph or line we will be approximating
-	graph = new Graph([](double x) { return (sin(x) / 1.5); });
-	graph->setColour(0.6, 0.6, 0.6);			// we then set the line colour on the graph
-	graph->applyNoise(conditions.NOISE);	// we then also apply some noise to it as well
+    auto noiseGraph = std::make_unique<Graph>([](double x) { return (sin(x) / 1.5); });
+    noiseGraph->setColour(0.6, 0.6, 0.6);			// we then set the line colour on the graph
+    noiseGraph->applyNoise(conditions.NOISE);	// we then also apply some noise to it as well
+    graph = noiseGraph.get();
 
-	// Then we install the graph without noise into the display as well as the graph with noise
-	display->installGraph((new Graph([&](double x) { return (sin(x) / 1.5); }))->setColour(1.0, 0.0, 0.0));
-	display->installGraph(graph);
+    auto normalGraph = std::make_unique<Graph>([](double x) { return (sin(x) / 1.5); });
+    normalGraph->setColour(1.0, 0.0, 0.0);
+
+    graph = noiseGraph.get();
+	display->installGraph(std::move(normalGraph));
+	display->installGraph(std::move(noiseGraph));
 }
 
 // This function sets up the multi layered percepton that will approximate the functoin
@@ -134,8 +136,11 @@ void NeuralNetworkTest::setupMultiLayeredPercepton() {
 	// print the train time to the console
 	std::cout << "MLP : " << (Timer::stop()) << std::endl;
 
+    auto mlpGraph = std::make_unique<Graph>(perceptronNetwork);
+    mlpGraph->setColour(0.0, 1.0, 0.0);
+
 	// and then install it to the display so it can be displayed
-	display->installGraph((new Graph(perceptronNetwork))->setColour(0.0, 1.0, 0.0));
+	display->installGraph(std::move(mlpGraph));
 }
 
 // This function sets up the radial basis function which will approximate the function
@@ -169,8 +174,9 @@ void NeuralNetworkTest::setupRadialBasisFunction() {
 	// print out the train time
 	std::cout << "RBF : " << (Timer::stop()) << std::endl;
 
-	// and install the results into the display via a graph object
-	display->installGraph((new Graph(network))->setColour(0.0, 0.0, 1.0));
+    auto rbfGraph = std::make_unique<Graph>(network);
+    rbfGraph->setColour(0.0, 0.0, 1.0);
+	display->installGraph(std::move(rbfGraph));
 }
 
 // Entry Point

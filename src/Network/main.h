@@ -49,7 +49,7 @@ private:
 	// The display we will render to
 	Display * display;
 	// The graph for the continuous function
-	Graph * graph;
+	Graph* graph;
 public:
 	// Constructor & Deconstructor
 	NeuralNetworkTest();

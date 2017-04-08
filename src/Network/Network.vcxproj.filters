@@ -18,22 +18,22 @@
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="graph.cpp">
+    <ClCompile Include="timer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="rbf.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="mlp.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="display.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="nodes.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="timer.cpp">
+    <ClCompile Include="mlp.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="graph.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="display.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,28 +47,28 @@
     <ClInclude Include="main.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="graph.h">
+    <ClInclude Include="timer.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="rbf.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="nodes.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="neural-network.h">
+      <Filter>Source</Filter>
+    </ClInclude>
     <ClInclude Include="mlp.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="graph.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="display.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="common.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="neural-network.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="nodes.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="timer.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

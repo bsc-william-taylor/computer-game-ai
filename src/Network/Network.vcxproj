@@ -61,7 +61,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y settings.xml $(OutDir)</Command>
+      <Command>xcopy /y settings.xml $(OutDir)
+xcopy /y ..\..\lib\freeglut\bin\freeglut.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,7 +83,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y settings.xml $(OutDir)</Command>
+      <Command>xcopy /y settings.xml $(OutDir)
+xcopy /y ..\..\lib\freeglut\bin\freeglut.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

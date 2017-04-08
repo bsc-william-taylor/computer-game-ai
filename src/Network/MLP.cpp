@@ -1,62 +1,75 @@
-/**
- * 
- * Copyright 2015 : William Taylor : wi11berto@yahoo.co.uk
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-#include "MLP.h"
+#include "mlp.h"
 
-MLP::MLP()
-	: errorThreshold(0.05), learningRate(0.2)
+MultiLayeredPercepton::MultiLayeredPercepton()
+	: errorThreshold(0.1), learningRate(0.1)
 {
 }
 
-MLP::~MLP()
+MultiLayeredPercepton::~MultiLayeredPercepton()
 {
+	for (auto& i : inputNeurons) {
+		delete i;
+	}
+
+	for (auto& i : hiddenNeurons) {
+		delete i;
+	}
+
+	for (auto& i : outputNeurons) {
+		delete i;
+	}
 }
 
-MLP * MLP::setErrorThreshold(double err)
+MultiLayeredPercepton * MultiLayeredPercepton::setErrorThreshold(double err)
 {
 	errorThreshold = err;
 	return this;
 }
 
-MLP * MLP::setLearningRate(double rate)
+MultiLayeredPercepton * MultiLayeredPercepton::setLearningRate(double rate)
 {
 	learningRate = rate;
 	return this;
 }
 
-MLP * MLP::setOutputLayer(std::vector<OutputNode *>& vec)
+MultiLayeredPercepton * MultiLayeredPercepton::setOutputLayer(std::vector<OutputNode *> vec)
 {
 	outputNeurons = std::vector<OutputNode *>(vec);
 	return this;
 }
 
-MLP * MLP::setHiddenLayer(std::vector<HiddenNode *>& vec)
+MultiLayeredPercepton * MultiLayeredPercepton::setHiddenLayer(std::vector<HiddenNode *> vec)
 {
 	hiddenNeurons = std::vector<HiddenNode *>(vec);
+	HiddenNode * bias = new HiddenNode();
+	bias->setActivationFunction(hiddenNeurons[0]->getFunction());
+	bias->makeBias();
+	
+	for (unsigned i = 0; i < outputNeurons.size(); i++){
+		bias->feedForwardTo(outputNeurons[i]);
+	}
+
+	hiddenNeurons.push_back(bias);
 	return this;
 }
 
-MLP * MLP::setInputLayer(std::vector<InputNode *>& vec)
+MultiLayeredPercepton * MultiLayeredPercepton::setInputLayer(std::vector<InputNode *> vec)
 {
 	inputNeurons = std::vector<InputNode *>(vec);
+	InputNode * bias = new InputNode();
+	bias->setValue(1.0);
+	for (unsigned i = 0; i < hiddenNeurons.size(); i++){
+		if (hiddenNeurons[i]->getValue() == 0.0) {
+			bias->feedForwardTo(hiddenNeurons[i]);
+		}
+	}
+
+	inputNeurons.push_back(bias);
 	return this;
 }
 
-MLP * MLP::learnMapping(int iterations)
+MultiLayeredPercepton * MultiLayeredPercepton::train(int iterations)
 {
 	std::vector<bool> testsCompleted;
 	testsCompleted.resize(trainingSet.size());
@@ -64,10 +77,11 @@ MLP * MLP::learnMapping(int iterations)
 		v = false;
 	}
 
-	int randomTestID = rand() % trainingSet.size();
+	int testID = chooseInputPattern(NULL, testsCompleted);
 
-	while (--iterations != 0) {
-		GraphPoint& test = trainingSet[randomTestID];	
+	int actualTimes = 0;
+	while (actualTimes <= iterations) {
+		Point& test = trainingSet[testID];
 		inputNeurons[0]->setValue(test.x);
 
 		for (auto& hiddenNode : hiddenNeurons) {
@@ -75,10 +89,14 @@ MLP * MLP::learnMapping(int iterations)
 		}
 
 		outputNeurons[0]->finish(hiddenNeurons);
+		
+		double error = test.y - outputNeurons[0]->getValue();
 
-		// if within the error margin
-		if (abs(test.y - outputNeurons[0]->getValue()) <= errorThreshold) {
-			testsCompleted[randomTestID] = true;
+//		DEBUG(error);
+
+		if (abs(error) <= errorThreshold) {
+			++actualTimes;
+			testsCompleted[testID] = true;
 			int totalTests = 0;
 			for (auto& v : testsCompleted) {
 				if (v) totalTests++;
@@ -87,48 +105,57 @@ MLP * MLP::learnMapping(int iterations)
 			if (totalTests == testsCompleted.size()){
 				break;
 			} else {
-				int previous = randomTestID;
-				do {
-					randomTestID = rand() % trainingSet.size();
-				} while (previous == randomTestID);
+				testID = chooseInputPattern(testID, testsCompleted); 
 			}
 		} else {
-			// Reset previous test passes
-			for (auto& v : testsCompleted) {
-				v = false;
-			}
-
-			// calculate the error in the network
-			outputNeurons[0]->calculateError(test.y); 
-			// then get the error
-			double error = outputNeurons[0]->getError();
+			for (auto& v : testsCompleted) { v = false; }
+			
 			// Adjust weights in the hidden neuron
-			for (auto & neuron : hiddenNeurons){
-				neuron->calculateError(outputNeurons[0], error);
+			for (auto & neuron : hiddenNeurons) {
+				if (!neuron->isBias()) {
+					neuron->calculateError(outputNeurons[0], error);
+				}
+
 				neuron->adjustWeight(outputNeurons[0], learningRate, error);
 			}
 
-			// Adjust the weights in the input neuron
-			for (int i = 0; i < hiddenNeurons.size(); i++) {
-				error = hiddenNeurons[i]->getError();
-				for (auto & neuron : inputNeurons){
-					neuron->adjustWeight(hiddenNeurons[i], learningRate, error);
+			for (auto & neuron : inputNeurons) {
+				for (int i = 0; i < hiddenNeurons.size(); i++) {
+					if (!hiddenNeurons[i]->isBias()) {
+						neuron->adjustWeight(hiddenNeurons[i], learningRate, hiddenNeurons[i]->getError());
+					}
 				}
 			}
+
+			//std::cout << "End" << std::endl;
+
+			testID = chooseInputPattern(testID, testsCompleted);
 		}
 	}
 
+	//std::cout << actualTimes << std::endl;
 	return this;
 }
 
-MLP * MLP::setTrainingSet(std::vector<GraphPoint>& point)
+int MultiLayeredPercepton::chooseInputPattern(int TEST_ID, std::vector<bool>& vec)
+{
+	int ID = TEST_ID;
+	int testID = 0;
+	do  {
+		testID = rand() % trainingSet.size();
+	} while (ID == testID && vec[testID]);
+
+	return testID;
+}
+
+MultiLayeredPercepton * MultiLayeredPercepton::setTrainingSet(std::vector<Point> point)
 {
 	this->trainingSet = point;
 
 	return this;
 }
 
-double MLP::fx(double x)
+double MultiLayeredPercepton::fx(double x)
 {
 	inputNeurons[0]->setValue(x);
 

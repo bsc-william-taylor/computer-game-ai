@@ -1,51 +1,33 @@
-/**
- * 
- * Copyright 2015 : William Taylor : wi11berto@yahoo.co.uk
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #pragma once
 
-#include "Network.h"
-#include "InputNode.h"
+#include "neural-network.h"
+#include "Nodes.h"
 #include "Graph.h"
-#include "OutputNode.h"
-#include "HiddenNode.h"
 
-class MLP : public NeurelNetwork
+class MultiLayeredPercepton : public ArtificalNeuralNetwork 
 {
 private:
 	double errorThreshold;
 	double learningRate;
-
-	std::vector<GraphPoint> trainingSet;
 public:
-	MLP();
-	~MLP();
+	MultiLayeredPercepton();
+	~MultiLayeredPercepton();
 
-	MLP * setOutputLayer(std::vector<OutputNode *>&);
-	MLP * setHiddenLayer(std::vector<HiddenNode *>&);
-	MLP * setInputLayer(std::vector<InputNode *>&);
-
-	MLP * setTrainingSet(std::vector<GraphPoint>&);
-	MLP * setErrorThreshold(double);
-	MLP * setLearningRate(double);
-	MLP * learnMapping(int);
-
-	double fx(double);
+	MultiLayeredPercepton * setOutputLayer(std::vector<OutputNode *>);
+	MultiLayeredPercepton * setHiddenLayer(std::vector<HiddenNode *>);
+	MultiLayeredPercepton * setInputLayer(std::vector<InputNode *>);
+	MultiLayeredPercepton * setTrainingSet(std::vector<Point>);
+	MultiLayeredPercepton * setErrorThreshold(double);
+	MultiLayeredPercepton * setLearningRate(double);
+	MultiLayeredPercepton * train(int);
 private:
 	std::vector<HiddenNode *> hiddenNeurons;
 	std::vector<OutputNode *> outputNeurons;
 	std::vector<InputNode *> inputNeurons;
+	std::vector<Point> trainingSet;
+public:
+	double fx(double);
+private:
+	int chooseInputPattern(int, std::vector<bool>& vec);
 };

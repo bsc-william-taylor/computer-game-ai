@@ -1,3 +1,15 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (GameAI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  rbf.cpp
+  mlp.cpp
+c:\users\william-taylor\desktop\computer-game-ai\src\network\mlp.cpp(123): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+c:\users\william-taylor\desktop\computer-game-ai\src\network\main.h(30): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\william-taylor\desktop\computer-game-ai\src\network\main.h(36): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\william-taylor\desktop\computer-game-ai\src\network\main.h(38): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
+  graph.cpp
+  display.cpp
+c:\users\william-taylor\desktop\computer-game-ai\src\network\display.cpp(127): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\william-taylor\desktop\computer-game-ai\src\network\display.cpp(128): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+  Generating Code...
   Network.vcxproj -> C:\Users\william-taylor\Desktop\computer-game-ai\src\Debug\Network.exe
   Network.vcxproj -> C:\Users\william-taylor\Desktop\computer-game-ai\src\Debug\Network.pdb (Full PDB)

@@ -8,6 +8,7 @@
 .vs
 Debug
 Release
+*.db
 
 # Precompiled Headers
 *.gch

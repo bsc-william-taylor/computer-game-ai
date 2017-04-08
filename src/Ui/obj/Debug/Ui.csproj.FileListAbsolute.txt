@@ -1,0 +1,13 @@
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\bin\Debug\Trainer.exe.config
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\bin\Debug\Trainer.exe
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\bin\Debug\Trainer.pdb
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\Ui.csprojResolveAssemblyReference.cache
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\EditorWindow.baml
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\EditorWindow.g.cs
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\App.g.cs
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\Trainer_MarkupCompile.cache
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\Trainer.g.resources
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\Trainer.Properties.Resources.resources
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\Ui.csproj.GenerateResource.Cache
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\Trainer.exe
+C:\Users\william-taylor\Desktop\computer-game-ai\src\Ui\obj\Debug\Trainer.pdb

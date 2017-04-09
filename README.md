@@ -21,6 +21,8 @@ The assignment was to design and compare a RBF and a MLP for approximating a fix
    * The RBFs width
    * The position of the RBFs
 
+Extra marks were given for coding the solution yourself rather than using MATLAB or other online sources. 
+
 ## Submission
 
 Once I had designed a basic RBF and MLP I then decided to write two applications to aid in writing the report. These applications helped output the result when marking the differences between the two networks and gave graphical representations that I could use in the report to demonstrate effects of varying variables.

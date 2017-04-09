@@ -37,4 +37,4 @@ A UI program was also written in C# with WPF which runs the network program and 
 
 ## License
 
-MIT
+Apache 2.0

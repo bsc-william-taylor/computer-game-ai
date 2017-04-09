@@ -1,51 +1,37 @@
 
 #pragma once
 
-#include "tinyxml2.h"
-#include "Display.h"
-#include "Graph.h"
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <time.h>
+#include <math.h>
+#include <assert.h>
 
-using namespace tinyxml2;
+#include "../../lib/freeglut/include/freeglut.h"
+#include "test-parameters.h"
+#include "timer.h"
 
-struct TestParameters {
-	unsigned int MLP_ITERATIONS;
-	unsigned int RBF_ITERATIONS;
+template<typename T>
+std::vector<T*> copy_vector(std::vector<std::unique_ptr<T>>& pointers)
+{
+    std::vector<T*> copies(pointers.size());
+    for (auto i = 0; i < pointers.size(); ++i)
+        copies[i] = pointers[i].get();
+    return copies;
+}
 
-	double MLP_ERROR_THRESHOLD;
-	double RBF_ERROR_THRESHOLD;
-	double MLP_LEARNING_RATE;
-	double RBF_LEARNING_RATE;
-
-	unsigned int TRAINING_SET = 10;
-	double NOISE = 0.075;
-
-	TestParameters() {
-		XMLDocument settingsDocument;
-		settingsDocument.LoadFile("settings.xml");
-
-		XMLNode * root = settingsDocument.FirstChildElement("Settings")->FirstChildElement("SettingsMLP");
-
-		MLP_ERROR_THRESHOLD = atof(root->FirstChildElement("ErrorThreshold")->GetText());
-		MLP_LEARNING_RATE = atof(root->FirstChildElement("LearningRate")->GetText());
-		MLP_ITERATIONS = atof(root->FirstChildElement("Iterations")->GetText());
-		
-		root = settingsDocument.FirstChildElement("Settings")->FirstChildElement("SettingsRBF");
-
-		RBF_ERROR_THRESHOLD = atof(root->FirstChildElement("ErrorThreshold")->GetText());
-		RBF_LEARNING_RATE = atof(root->FirstChildElement("LearningRate")->GetText());
-		RBF_ITERATIONS = atof(root->FirstChildElement("Iterations")->GetText());
-		
-		TRAINING_SET = atof(settingsDocument.FirstChildElement("Settings")->FirstChildElement("TrainingData")->GetText());
-		NOISE =  atof(settingsDocument.FirstChildElement("Settings")->FirstChildElement("Noise")->GetText());
-	}
-};
+class TestParameters;
+class Display;
+class Graph;
 
 // Our test class just creates and tests objects
 class NeuralNetworkTest
 {
 private:
 	// The paramers for the test
-	TestParameters conditions;
+	TestParameters params;
 	// The display we will render to
 	Display * display;
 	// The graph for the continuous function

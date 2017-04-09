@@ -2,7 +2,7 @@
 #pragma once
 
 #include "neural-network.h"
-#include "common.h"
+#include "main.h"
 
 struct Point {
     double x, y, z;

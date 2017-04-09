@@ -1,8 +1,8 @@
 
 #include "mlp.h"
 
-MLP::MLP() : 
-    errorThreshold(0.1), 
+MLP::MLP() :
+    errorThreshold(0.1),
     learningRate(0.1)
 {
 }
@@ -11,25 +11,25 @@ MLP::~MLP()
 {
 }
 
-MLP * MLP::setErrorThreshold(double err)
+MLP* MLP::setErrorThreshold(double err)
 {
     errorThreshold = err;
     return this;
 }
 
-MLP * MLP::setLearningRate(double rate)
+MLP* MLP::setLearningRate(double rate)
 {
     learningRate = rate;
     return this;
 }
 
-MLP * MLP::setOutputLayer(OutputLayer vec)
+MLP* MLP::setOutputLayer(OutputLayer vec)
 {
     outputNeurons = std::move(vec);
     return this;
 }
 
-MLP * MLP::setHiddenLayer(HiddenLayerMLP vec)
+MLP* MLP::setHiddenLayer(HiddenLayerMLP vec)
 {
     hiddenNeurons = std::move(vec);
 
@@ -46,14 +46,16 @@ MLP * MLP::setHiddenLayer(HiddenLayerMLP vec)
     return this;
 }
 
-MLP * MLP::setInputLayer(InputLayer vec)
+MLP* MLP::setInputLayer(InputLayer vec)
 {
     inputNeurons = std::move(vec);
-
     auto bias = std::make_unique<InputNode>();
     bias->setValue(1.0);
-    for (unsigned i = 0; i < hiddenNeurons.size(); i++) {
-        if (hiddenNeurons[i]->getValue() == 0.0) {
+
+    for (unsigned i = 0; i < hiddenNeurons.size(); i++) 
+    {
+        if (hiddenNeurons[i]->getValue() == 0.0) 
+        {
             bias->feedForwardTo(hiddenNeurons[i].get());
         }
     }
@@ -62,61 +64,63 @@ MLP * MLP::setInputLayer(InputLayer vec)
     return this;
 }
 
-MLP * MLP::train(int iterations)
+MLP* MLP::train(int iterations)
 {
-    std::vector<bool> testsCompleted;
-    testsCompleted.resize(trainingSet.size());
-    for (auto& v : testsCompleted) {
-        v = false;
-    }
+    std::vector<bool> testsCompleted(trainingSet.size(), { false });
+    auto testID = chooseInputPattern(NULL, testsCompleted);
+    auto times = 0;
 
-    int testID = chooseInputPattern(NULL, testsCompleted);
-
-    int actualTimes = 0;
-    while (actualTimes <= iterations) {
-        Point& test = trainingSet[testID];
+    while (times <= iterations)
+    {
+        auto& test = trainingSet[testID];
         inputNeurons[0]->setValue(test.x);
 
-        for (auto& hiddenNode : hiddenNeurons) 
+        for (auto& hiddenNode : hiddenNeurons)
         {
             hiddenNode->feedForward(copy_vector(inputNeurons));
         }
 
         outputNeurons[0]->finish(copy_vector(hiddenNeurons));
-
         double error = test.y - outputNeurons[0]->getValue();
 
-        if (abs(error) <= errorThreshold) {
-            ++actualTimes;
+        if (abs(error) <= errorThreshold) 
+        {            
             testsCompleted[testID] = true;
-            int totalTests = 0;
-            for (auto& v : testsCompleted) {
-                if (v) totalTests++;
-            }
+            auto totalTests = 0;
+            ++times;
 
-            if (totalTests == testsCompleted.size()) {
+            for (auto& v : testsCompleted)
+                if (v) 
+                    totalTests++;
+
+            if (totalTests == testsCompleted.size())
+            { 
                 break;
             }
-            else {
-                testID = chooseInputPattern(testID, testsCompleted);
-            }
-        }
-        else {
-            for (auto& v : testsCompleted) { v = false; }
 
-            // Adjust weights in the hidden neuron
-            for (auto & neuron : hiddenNeurons) {
-                if (!neuron->isBias()) {
+            testID = chooseInputPattern(testID, testsCompleted);
+        }
+        else
+        {
+            std::fill(testsCompleted.begin(), testsCompleted.end(), false);
+
+            for (auto & neuron : hiddenNeurons)
+            {
+                if (!neuron->isBias())
+                {
                     neuron->calculateError(outputNeurons[0].get(), error);
                 }
 
                 neuron->adjustWeight(outputNeurons[0].get(), learningRate, error);
             }
 
-            for (auto & neuron : inputNeurons) {
-                for (int i = 0; i < hiddenNeurons.size(); i++) {
-                    if (!hiddenNeurons[i]->isBias()) {
-                        neuron->adjustWeight(hiddenNeurons[i].get(), learningRate, hiddenNeurons[i]->getError());
+            for (auto& inputNeuron : inputNeurons)
+            {
+                for (auto& hiddenNeuron : hiddenNeurons)
+                {
+                    if (!hiddenNeuron->isBias())
+                    {
+                        inputNeuron->adjustWeight(hiddenNeuron.get(), learningRate, hiddenNeuron->getError());
                     }
                 }
             }
@@ -139,7 +143,7 @@ int MLP::chooseInputPattern(int TEST_ID, std::vector<bool>& vec)
     return testID;
 }
 
-MLP * MLP::setTrainingSet(TrainingData point)
+MLP* MLP::setTrainingSet(TrainingData point)
 {
     trainingSet = point;
     return this;
@@ -149,11 +153,11 @@ double MLP::fx(double x)
 {
     inputNeurons.front()->setValue(x);
 
-    for (auto& hiddenNode : hiddenNeurons) 
+    for (auto& hiddenNode : hiddenNeurons)
     {
         hiddenNode->feedForward(copy_vector(inputNeurons));
     }
-    
+
     outputNeurons.front()->finish(copy_vector(hiddenNeurons));
     return outputNeurons.front()->getValue();
 }

@@ -3,10 +3,12 @@
 #include "Nodes.h"
 #include "mlp.h"
 #include "rbf.h"
+#include "display.h"
 
-NeuralNetworkTest::NeuralNetworkTest()
+NeuralNetworkTest::NeuralNetworkTest() :
+    display(Display::create(720, 480)),
+    params("settings.xml")
 {
-    display = Display::create(720, 480);
 }
 
 NeuralNetworkTest::~NeuralNetworkTest()
@@ -30,7 +32,7 @@ void NeuralNetworkTest::start()
 void NeuralNetworkTest::setupContinuousFunction() {
     auto noiseGraph = std::make_unique<Graph>([](double x) { return (sin(x) / 1.5); });
     noiseGraph->setColour(0.6, 0.6, 0.6);
-    noiseGraph->applyNoise(conditions.NOISE);
+    noiseGraph->applyNoise(params.noise);
     graph = noiseGraph.get();
 
     auto normalGraph = std::make_unique<Graph>([](double x) { return (sin(x) / 1.5); });
@@ -76,15 +78,15 @@ void NeuralNetworkTest::setupMultiLayeredPercepton()
         inputLayer[0]->feedForwardTo(hiddenNode.get());
     }
 
-    auto trainingDataset = graph->getTrainingSet(conditions.TRAINING_SET);
+    auto trainingDataset = graph->getTrainingSet(params.trainingSet);
     auto network = new MLP();
-    network->setErrorThreshold(conditions.MLP_ERROR_THRESHOLD);
-    network->setLearningRate(conditions.MLP_LEARNING_RATE);
+    network->setErrorThreshold(params.mlp.errorThreshold);
+    network->setLearningRate(params.mlp.learningRate);
     network->setTrainingSet(trainingDataset);
     network->setOutputLayer(std::move(outputLayer));
     network->setHiddenLayer(std::move(hiddenLayer));
     network->setInputLayer(std::move(inputLayer));
-    network->train(conditions.MLP_ITERATIONS);
+    network->train(params.mlp.iterations);
 
     auto graph = std::make_unique<Graph>(network);
     graph->setColour(0.0, 1.0, 0.0);
@@ -93,14 +95,14 @@ void NeuralNetworkTest::setupMultiLayeredPercepton()
 
 void NeuralNetworkTest::setupRadialBasisFunction()
 {
-    auto trainingSet = graph->getTrainingSet(conditions.TRAINING_SET);
+    auto trainingSet = graph->getTrainingSet(params.trainingSet);
     auto network = new RBF();
-    network->setErrorThreshold(conditions.RBF_ERROR_THRESHOLD);
-    network->setLearningRate(conditions.RBF_LEARNING_RATE);
+    network->setErrorThreshold(params.rbf.errorThreshold);
+    network->setLearningRate(params.rbf.learningRate);
     network->setSpaceFunction([](double x, double c) { return exp(-1.0 * pow(abs(x - c), 2.0)); });
     network->setTrainingData(trainingSet);
     network->setupHiddenLayer();
-    network->train(conditions.RBF_ITERATIONS);
+    network->train(params.rbf.iterations);
 
     auto graph = std::make_unique<Graph>(network);
     graph->setColour(0.0, 0.0, 1.0);

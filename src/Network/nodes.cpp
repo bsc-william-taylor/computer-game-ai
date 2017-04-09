@@ -132,10 +132,10 @@ double& InputNode::getValue()
     return value;
 }
 
-HiddenNode::HiddenNode()
-    : value(0.0)
+HiddenNode::HiddenNode() : 
+    value(0.0)
 {
-    _bias = false;
+    bias = false;
 }
 
 HiddenNode::~HiddenNode()
@@ -200,10 +200,10 @@ double HiddenNode::getValue()
     return value;
 }
 
-FunctionNode::FunctionNode(std::function<double(double, double)> func)
+FunctionNode::FunctionNode(std::function<double(double, double)> func) :
+    spaceFunc(func),
+    weight(1.0)
 {
-    spaceFunc = func;
-    weight = 1.0;
 }
 
 FunctionNode::~FunctionNode()

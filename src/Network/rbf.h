@@ -3,7 +3,7 @@
 
 #include "neural-network.h"
 #include "mlp.h"
-#include "Nodes.h"
+#include "nodes.h"
 
 class RBF : public NeuralNetwork  
 {

@@ -1,8 +1,6 @@
 
 #pragma once
 
-#include "Common.h"
-
 class NeuralNetwork
 {
 public:

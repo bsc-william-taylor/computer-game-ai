@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "Common.h"
+#include "main.h"
 
 class ResultNode;
 class HiddenNode;
@@ -107,7 +107,7 @@ class HiddenNode
     std::vector<OutputNode *> outputNodes;
     std::vector<double> weights;
 
-    bool _bias;
+    bool bias;
     double error;
     double value;
 public:
@@ -126,12 +126,12 @@ public:
     void adjustWeight(OutputNode * node, double learning, double error);
     void setValue(double);
     void makeBias() {
-        _bias = true;
+        bias = true;
         value = 1.0;
     }
 
     bool isBias() {
-        return _bias;
+        return bias;
     }
 
     double getError();

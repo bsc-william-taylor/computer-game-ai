@@ -11,12 +11,12 @@ The Computer Game AI module taught students basic neural network types such as t
 
 As stated the assignment was to design and compare a RBF and a MLP for approximating a fixed function. With each network designed we were then asked to vary the following parameters in the networks. Extra marks were given for coding the solution yourself rather than using MATLAB or other online sources. 
 
-**MLP**
+* **MLP**
     * Number of hidden neurons
     * The learning rate
     * Values of momentum term
 
-**RBF**
+* **RBF**
     * Number of RBFs
     * The RBFs width
     * The position of the RBFs
